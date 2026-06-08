@@ -874,6 +874,7 @@
   <div class="topbar">
     <div class="topbar-title" id="topbarTitle">Схема дома</div>
     <div class="topbar-actions">
+      <button class="btn btn-outline" onclick="loadFromSheets()">↻ Обновить</button>
       <button class="btn btn-outline" onclick="exportData()">Экспорт JSON</button>
       <button class="btn btn-gold" onclick="openPanel(null)">+ Быстрое обновление</button>
     </div>
@@ -1007,7 +1008,7 @@ const FLOORS = [
   { label: 'Этаж −1', floor: -1 },
 ];
 
-const PASSWORD = '~]q0KRKd4hj__>b';
+const PASSWORD = '369sale';
 let data = {};
 let currentApt = null;
 
@@ -1030,17 +1031,49 @@ function init() {
   renderSchema();
   renderList();
   renderStats();
+  // Load fresh data from Google Sheets
+  loadFromSheets();
 }
 
+const GS_URL = 'https://script.google.com/macros/s/AKfycbx68bikDibOpcr5THRrAzEj3rM4DUiczOLvTobk4lVgL4aiHk0A2nX35T06OM-tYT6h/exec';
+
 function saveData() {
-  // Save metadata (no photos) in main key
+  // Keep localStorage as fallback
   const meta = {};
   Object.keys(data).forEach(num => {
     meta[num] = { status: data[num].status, price: data[num].price, notes: data[num].notes };
   });
+  try { localStorage.setItem('gr_admin_data', JSON.stringify(meta)); } catch(e) {}
+}
+
+async function saveToSheets(num) {
+  const d = data[num];
+  if (!d) return;
   try {
-    localStorage.setItem('gr_admin_data', JSON.stringify(meta));
-  } catch(e) { showToast('Ошибка: хранилище переполнено'); }
+    await fetch(GS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ num, status: d.status, price: d.price, notes: d.notes })
+    });
+  } catch(e) { showToast('Ошибка сохранения в таблицу'); }
+}
+
+async function loadFromSheets() {
+  try {
+    const res = await fetch(GS_URL);
+    const json = await res.json();
+    Object.keys(json).forEach(num => {
+      if (data[num]) {
+        data[num].status = json[num].status || 'available';
+        if (json[num].price) data[num].price = json[num].price;
+        if (json[num].notes) data[num].notes = json[num].notes;
+      }
+    });
+    renderSchema();
+    renderList();
+    renderStats();
+    showToast('Данные загружены из таблицы');
+  } catch(e) { showToast('Ошибка загрузки из таблицы'); }
 }
 
 function savePhotos(num) {
@@ -1232,11 +1265,11 @@ function saveApt() {
   data[num].notes = document.getElementById('panelNotes').value;
   // photos saved on upload
   saveData();
+  saveToSheets(num).then(() => showToast(`N°${num} сохранена ✓`));
   renderSchema();
   renderList();
   renderStats();
   closePanel();
-  showToast(`N°${num} сохранена`);
 }
 
 // ── PHOTOS ──
