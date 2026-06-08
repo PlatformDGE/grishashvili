@@ -1576,9 +1576,13 @@ function lbNavigate(dir) {
 }
 
 function closeLightbox(e){
-  if(!e||!e.target||e.target===document.getElementById('lightbox')||e.target.classList.contains('lightbox-close')){
-    const img=document.getElementById('lightboxImg');if(img){img.style.transform='scale(1) translate(0,0)';img.style.cursor='zoom-in';}lbScale=1;lbTransX=0;lbTransY=0;
-    document.getElementById('lightbox').classList.remove('open');
+  const lb = document.getElementById('lightbox');
+  if(!e || !e.target || e.target === lb || (e.target.closest && e.target.closest('.lightbox-close'))){
+    const img = document.getElementById('lightboxImg');
+    if(img){ img.style.transform='scale(1) translate(0,0)'; img.style.cursor='zoom-in'; }
+    lbScale=1; lbTransX=0; lbTransY=0;
+    lb.style.display='none';
+    lb.classList.remove('is-open');
     document.body.style.overflow='';
   }
 }
