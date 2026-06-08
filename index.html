@@ -1354,12 +1354,13 @@ function renderApts(){
     // Floor label
     const floorStr=a.floor===-1?'−1':''+a.floor;
 
-    // Price block
+    // Price — use GS price if available
+    const displayPrice = (admin.price && admin.price > 0) ? admin.price : a.price;
     const priceBlock=isSold
       ?`<div class="apt-price-block"><div class="apt-price-label" style="color:#c0392b;"><span class="apt-status-dot sold"></span>Продана</div></div>`
       :isReserved
-        ?`<div class="apt-price-block"><div class="apt-price-label"><span class="apt-status-dot reserved"></span>Резерв</div><div class="apt-price-value">$${a.price.toLocaleString()}</div></div>`
-        :`<div class="apt-price-block"><div class="apt-price-label">${prLabel[lang]}</div><div class="apt-price-value">$${a.price.toLocaleString()}</div></div>`;
+        ?`<div class="apt-price-block"><div class="apt-price-label"><span class="apt-status-dot reserved"></span>Резерв</div><div class="apt-price-value">$${displayPrice.toLocaleString()}</div></div>`
+        :`<div class="apt-price-block"><div class="apt-price-label">${prLabel[lang]}</div><div class="apt-price-value">$${displayPrice.toLocaleString()}</div></div>`;
 
     const inquireBtn=isSold?'':`<a href="#contact" class="apt-inquire">${inqLabel[lang]}</a>`;
 
@@ -1444,13 +1445,30 @@ function submitForm(){
   window.open(`https://wa.me/995599206716?text=${text}`,'_blank');
 }
 
-  // ── Load admin data from localStorage ──
-  function getAdminData(num) {
+  // ── Google Sheets API ──
+  const GS_URL = 'https://script.google.com/macros/s/AKfycbx68bikDibOpcr5THRrAzEj3rM4DUiczOLvTobk4lVgL4aiHk0A2nX35T06OM-tYT6h/exec';
+  let gsData = {};
+  let gsLoaded = false;
+
+  async function loadGsData() {
     try {
-      const meta = JSON.parse(localStorage.getItem('gr_admin_data') || '{}');
-      const photos = JSON.parse(localStorage.getItem('gr_photos_' + num) || '[]').filter(Boolean);
-      return { status: (meta[num] && meta[num].status) || 'available', photos };
-    } catch(e) { return { status: 'available', photos: [] }; }
+      const res = await fetch(GS_URL);
+      const json = await res.json();
+      gsData = json;
+      gsLoaded = true;
+      renderApts();
+      renderSchema();
+    } catch(e) { console.warn('GS load error', e); }
+  }
+
+  function getAdminData(num) {
+    const gs = gsData[num] || {};
+    const photos = JSON.parse(localStorage.getItem('gr_photos_' + num) || '[]').filter(Boolean);
+    return {
+      status: gs.status || 'available',
+      price: gs.price || null,
+      photos
+    };
   }
 
   function updateGalleryUI(num, cur, total) {
@@ -1648,27 +1666,11 @@ function submitForm(){
     setLang('en');
     renderApts();
     renderSchema();
+    loadGsData();
   });
 
-  // Sync with admin panel in real time
-  // 1. Storage event — fires when another tab changes localStorage
-  window.addEventListener('storage', function(e) {
-    if (e.key && (e.key === 'gr_admin_data' || e.key.startsWith('gr_photos_'))) {
-      renderApts();
-      renderSchema();
-    }
-  });
-
-  // 2. Polling every 5 seconds — works on same tab / mobile
-  let _lastAdminHash = '';
-  setInterval(function() {
-    const current = localStorage.getItem('gr_admin_data') || '';
-    if (current !== _lastAdminHash) {
-      _lastAdminHash = current;
-      renderApts();
-      renderSchema();
-    }
-  }, 5000);
+  // Sync with Google Sheets every 30 seconds
+  setInterval(loadGsData, 30000);
 </script>
 </body>
 </html>
