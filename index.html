@@ -860,10 +860,10 @@ section { padding:110px 80px; }
 .apt-inquire:hover { background:var(--navy); color:white; }
 
 /* LIGHTBOX */
-.lightbox { display:none; position:fixed; inset:0; z-index:9999; background:rgba(13,26,51,0.95); align-items:center; justify-content:center; padding:40px; }
+.lightbox { display:none; position:fixed; inset:0; z-index:9999; background:rgba(13,26,51,0.97); align-items:center; justify-content:center; padding:20px; touch-action:none; }
 .lightbox.open { display:flex; }
-.lightbox-inner { position:relative; max-width:700px; width:100%; background:white; }
-.lightbox-img { width:100%; height:auto; display:block; }
+.lightbox-inner { position:relative; max-width:900px; width:100%; display:flex; flex-direction:column; align-items:center; overflow:hidden; }
+.lightbox-img { max-width:100%; max-height:80vh; display:block; object-fit:contain; transform-origin:center center; transition:transform 0.1s; user-select:none; -webkit-user-drag:none; }
 .lightbox-close { position:absolute; top:-40px; right:0; background:none; border:none; color:white; font-size:28px; cursor:pointer; font-weight:300; line-height:1; }
 .lightbox-info { padding:16px 20px; background:var(--navy); color:white; font-size:12px; font-weight:400; letter-spacing:0.06em; font-family:'Inter',sans-serif; }
 
@@ -1440,11 +1440,17 @@ function filterApts(br,btn){
 }
 
 function openLightbox(aptNum){
+  if(!aptNum) return;
   const apt=apts.find(a=>a.num===aptNum);
-  document.getElementById('lightboxImg').src=planImages[aptNum];
-  document.getElementById('lightboxInfo').textContent=`Apartment N°${aptNum} · ${apt.area} m² · ${brLabel[lang][apt.br]} · ${flLabel[lang](apt.floor)}`;
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow='hidden';
+  const img=document.getElementById('lightboxImg');
+  img.src=planImages[aptNum];
+  img.style.transform='scale(1)';
+  lbScale=1; lbLastScale=1;
+  document.getElementById('lightboxInfo').textContent=apt?`N°${apt.num} · ${apt.area} m² · ${flLabel[lang](apt.floor)}`:'';
+  const lb=document.getElementById('lightbox');
+  lb.style.display='flex';
+  lb.dataset.apt=aptNum;
+  initPinchZoom(img);
 }
 
 function closeLightbox(e){
@@ -1719,7 +1725,57 @@ function submitForm(){
   }
 
 
+  // ── PINCH TO ZOOM (lightbox) ──
+  let lbScale = 1, lbLastScale = 1, lbStartDist = 0;
+  let lbTapTime = 0;
+
+  function initPinchZoom(img) {
+    img.removeEventListener('touchstart', lbTouchStart);
+    img.removeEventListener('touchmove', lbTouchMove);
+    img.removeEventListener('touchend', lbTouchEnd);
+    img.addEventListener('touchstart', lbTouchStart, {passive:false});
+    img.addEventListener('touchmove', lbTouchMove, {passive:false});
+    img.addEventListener('touchend', lbTouchEnd);
+  }
+
+  function getTouchDist(t) {
+    return Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  }
+
+  function lbTouchStart(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      lbStartDist = getTouchDist(e.touches);
+      lbLastScale = lbScale;
+    } else if (e.touches.length === 1) {
+      const now = Date.now();
+      if (now - lbTapTime < 300) {
+        // double tap — toggle zoom
+        lbScale = lbScale > 1.2 ? 1 : 2.5;
+        e.currentTarget.style.transform = `scale(${lbScale})`;
+      }
+      lbTapTime = now;
+    }
+  }
+
+  function lbTouchMove(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dist = getTouchDist(e.touches);
+      lbScale = Math.min(5, Math.max(1, lbLastScale * (dist / lbStartDist)));
+      e.currentTarget.style.transform = `scale(${lbScale})`;
+    }
+  }
+
+  function lbTouchEnd(e) {
+    if (lbScale < 1.05) {
+      lbScale = 1;
+      e.currentTarget.style.transform = 'scale(1)';
+    }
+  }
+
   // Initialize on load
+
   document.addEventListener('DOMContentLoaded', function(){
     setLang('en');
     renderApts();
