@@ -593,17 +593,16 @@ section { padding:110px 80px; }
 .filter-tabs { display:flex; gap:3px; }
 .filter-tab { background:none; border:1px solid var(--border); padding:9px 22px; font-family:'Inter',sans-serif; font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; color:var(--text-muted); transition:all 0.2s; }
 .filter-tab.active,.filter-tab:hover { background:var(--navy); border-color:var(--navy); color:white; }
-.apts-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
-.apt-card { background:white; border:1px solid var(--border); transition:box-shadow 0.3s; position:relative; overflow:hidden; }
-.apt-card:hover { box-shadow:0 8px 32px rgba(0,0,0,0.10); }
+.apts-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); }
+.apt-card { background:white; transition:all 0.35s; position:relative; overflow:hidden; }
+.apt-card:hover { box-shadow:0 12px 40px rgba(29,53,96,0.13); transform:translateY(-2px); z-index:2; }
 
 /* ── APT CARD GALLERY ── */
 .apt-gallery {
   position: relative;
-  height: 260px;
+  height: 195px;
   overflow: hidden;
   background: #f0ede8;
-  border-bottom: 1px solid var(--border);
 }
 .apt-gallery-track {
   display: flex;
@@ -638,56 +637,59 @@ section { padding:110px 80px; }
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(13,26,51,0.55);
+  background: rgba(255,255,255,0.9);
   border: none;
-  color: white;
-  width: 34px; height: 34px;
+  color: var(--navy);
+  width: 28px; height: 28px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   z-index: 4;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
-  border-radius: 2px;
-  backdrop-filter: blur(4px);
+  transition: all 0.2s;
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-.apt-gallery-nav:hover { background: rgba(13,26,51,0.85); }
+.apt-gallery:hover .apt-gallery-nav { opacity: 1; }
+.apt-gallery-nav:hover { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 .apt-gallery-prev { left: 10px; }
 .apt-gallery-next { right: 10px; }
 /* Dots */
 .apt-gallery-dots {
   position: absolute;
-  bottom: 10px;
+  bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 5px;
+  gap: 4px;
   z-index: 4;
 }
 .apt-gallery-dot {
-  width: 6px; height: 6px;
+  width: 4px; height: 4px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.45);
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: all 0.2s;
+  transition: all 0.25s;
 }
-.apt-gallery-dot.active { background: white; transform: scale(1.2); }
+.apt-gallery-dot.active { background: white; width: 16px; border-radius: 2px; }
 /* Counter badge */
 .apt-gallery-counter {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(13,26,51,0.6);
-  color: white;
+  background: rgba(0,0,0,0.35);
+  color: rgba(255,255,255,0.9);
   font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  padding: 3px 8px;
-  border-radius: 2px;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 3px 7px;
+  border-radius: 10px;
   z-index: 4;
   backdrop-filter: blur(4px);
 }
@@ -701,70 +703,58 @@ section { padding:110px 80px; }
   z-index: 4;
 }
 .apt-gallery-tab {
-  background: rgba(13,26,51,0.6);
-  border: none;
-  color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.7);
   font-family: 'Inter', sans-serif;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 4px 8px;
+  padding: 3px 8px;
   cursor: pointer;
   transition: all 0.2s;
   backdrop-filter: blur(4px);
-  border-radius: 2px;
+  border-radius: 10px;
 }
-.apt-gallery-tab.active { background: var(--gold); color: var(--navy-deep); }
+.apt-gallery-tab.active { background: white; color: var(--navy); border-color: white; }
 /* SOLD overlay */
 .apt-sold-overlay { position:absolute; inset:0; background:rgba(13,26,51,0.72); display:flex; align-items:center; justify-content:center; z-index:5; }
-.apt-sold-label { font-family:'Playfair Display',serif; font-size:22px; font-weight:500; color:white; letter-spacing:0.12em; border:1px solid rgba(255,255,255,0.4); padding:8px 28px; }
+.apt-sold-label { font-family:'Inter',serif; font-size:11px; font-weight:600; color:white; letter-spacing:0.3em; text-transform:uppercase; border:1px solid rgba(255,255,255,0.5); padding:8px 20px; }
 /* RESERVED badge */
 .apt-reserved-badge { position:absolute; top:10px; left:10px; background:var(--reserved,#e67e22); color:white; font-family:'Inter',sans-serif; font-size:9px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; padding:4px 10px; z-index:4; border-radius:2px; }
 
 /* ── APT CARD BODY — rich info ── */
-.apt-body { padding:16px 18px 18px; }
-.apt-body-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-}
-.apt-body-left {}
-.apt-body-right { text-align: right; }
+.apt-body { padding:14px 16px 16px; }
+.apt-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+.apt-area-unit { font-size:12px; font-family:'Inter',sans-serif; font-weight:400; color:var(--text-muted); }
+
 
 .apt-meta-row {
   display: flex;
-  gap: 16px;
-  padding: 10px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 12px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
 }
 .apt-meta-item {
-  flex: 1;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
 }
 .apt-meta-val {
-  font-family: 'Playfair Display', serif;
-  font-size: 17px;
-  font-weight: 400;
-  color: var(--navy);
-  line-height: 1.2;
+  font-weight: 500;
+  color: var(--charcoal);
 }
-.apt-meta-key {
-  font-family: 'Inter', sans-serif;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
+.apt-meta-key { display: none; }
 .apt-meta-divider {
-  width: 1px;
+  width: 3px; height: 3px;
+  border-radius: 50%;
   background: var(--border);
-  align-self: stretch;
+  flex-shrink: 0;
 }
 
 /* Status dot */
@@ -775,7 +765,7 @@ section { padding:110px 80px; }
 
 /* SOLD overlay */
 .apt-sold-overlay { position:absolute; inset:0; background:rgba(13,26,51,0.72); display:flex; align-items:center; justify-content:center; z-index:5; }
-.apt-sold-label { font-family:'Playfair Display',serif; font-size:22px; font-weight:500; color:white; letter-spacing:0.12em; border:1px solid rgba(255,255,255,0.4); padding:8px 28px; }
+.apt-sold-label { font-family:'Inter',serif; font-size:11px; font-weight:600; color:white; letter-spacing:0.3em; text-transform:uppercase; border:1px solid rgba(255,255,255,0.5); padding:8px 20px; }
 
 /* RESERVED badge */
 .apt-reserved-badge { position:absolute; top:12px; left:12px; background:var(--reserved,#e67e22); color:white; font-family:'Inter',sans-serif; font-size:9px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; padding:4px 10px; z-index:4; }
@@ -824,16 +814,16 @@ section { padding:110px 80px; }
 }
 .apt-card:hover .apt-zoom-hint { opacity:1; }
 
-.apt-num { position:absolute; bottom:8px; left:12px; font-size:10px; font-weight:600; letter-spacing:0.14em; color:var(--navy); text-transform:uppercase; z-index:2; font-family:'Inter',sans-serif; }
+.apt-num { position:absolute; top:10px; left:10px; font-size:9px; font-weight:600; letter-spacing:0.1em; color:white; text-transform:uppercase; z-index:2; font-family:'Inter',sans-serif; background:rgba(13,26,51,0.55); padding:3px 8px; border-radius:2px; backdrop-filter:blur(4px); }
 .apt-body { padding:18px; }
 .apt-type { font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-family:'Inter',sans-serif; }
-.apt-area { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:var(--charcoal); line-height:1; margin-bottom:4px; }
+.apt-area { font-family:'Playfair Display',serif; font-size:22px; font-weight:400; color:var(--navy); line-height:1; margin-bottom:8px; }
 .apt-area span { font-size:14px; color:var(--text-muted); }
 .apt-floor { font-size:11px; font-weight:400; color:var(--text-muted); margin-bottom:14px; font-family:'Inter',sans-serif; }
 .apt-price-block {
   border-top: 1px solid var(--border);
-  padding-top: 13px;
-  margin-bottom: 10px;
+  padding-top: 10px;
+  margin-bottom: 8px;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -849,7 +839,7 @@ section { padding:110px 80px; }
 }
 .apt-price-value {
   font-family: 'Playfair Display', serif;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 500;
   color: var(--navy);
   letter-spacing: -0.01em;
@@ -947,9 +937,11 @@ button[data-lang].active { display:inline; }
   .about,.location,.contact { grid-template-columns:1fr; gap:48px; }
   .partner-section { grid-template-columns:1fr; padding:60px 28px; gap:40px; }
   .partner-logo-wrap { flex-direction:row; justify-content:center; }
-  .apts-grid { grid-template-columns:1fr; }
+  .apts-grid { grid-template-columns:1fr; gap:1px; }
   .apt-gallery { height:240px; }
   .apt-body { padding:14px 16px 16px; }
+.apt-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+.apt-area-unit { font-size:12px; font-family:'Inter',sans-serif; font-weight:400; color:var(--text-muted); }
   .apt-meta-row { gap:8px; }
   .apt-meta-val { font-size:15px; }
   .apt-meta-key { font-size:8px; }
@@ -975,7 +967,7 @@ button[data-lang].active { display:inline; }
 }
 
 @media (max-width:480px) {
-  .apts-grid { grid-template-columns:1fr; }
+  .apts-grid { grid-template-columns:1fr; gap:1px; }
   .apt-gallery { height:210px; }
   .apt-price-value { font-size:17px; }
 }
@@ -1305,7 +1297,7 @@ const apts = [
 ];
 
 const brLabel={en:{1:'1 Bedroom',2:'2 Bedrooms',3:'3 Bedrooms'},ru:{1:'1 спальня',2:'2 спальни',3:'3 спальни'},ge:{1:'1 საძინებელი',2:'2 საძინებელი',3:'3 საძინებელი'}};
-const flLabel={en:f=>f===-1?'Ground Floor (–1)':`Floor ${f}`,ru:f=>f===-1?'Цокольный этаж':` Этаж ${f}`,ge:f=>f===-1?'მიწისქვეშა სართული':`${f} სართული`};
+const flLabel={en:f=>f===-1?'Floor –1':`Floor ${f}`,ru:f=>f===-1?'Этаж –1':`Этаж ${f}`,ge:f=>f===-1?'სართ. –1':`${f} სართული`};
 const prLabel={en:'Starting price',ru:'Стоимость',ge:'ღირებულება'};
 const badgeLabel={invest:{en:'Investment',ru:'Инвест.',ge:'ინვესტ.'},penthouse:{en:'Penthouse',ru:'Пентхаус',ge:'პენტჰაუსი'},premium:{en:'Premium',ru:'Премიუმ',ge:'პრემიუმი'}};
 const inqLabel={en:'Inquire →',ru:'Запросить →',ge:'მოთხოვნა →'};
@@ -1375,35 +1367,17 @@ function renderApts(){
       ${badge}
       ${gallery}
       <div class="apt-body">
-        <div class="apt-body-top">
-          <div class="apt-body-left">
-            <div class="apt-type">${brLabel[lang][a.br]}</div>
-            <div class="apt-area">${a.area}<span style="font-size:14px;font-family:'Inter',sans-serif;font-weight:400;"> m²</span></div>
-          </div>
-          <div class="apt-body-right">
-            <div class="apt-floor">${flLabel[lang](a.floor)}</div>
-          </div>
+        <div class="apt-head">
+          <div class="apt-type">${brLabel[lang][a.br]}</div>
+          <div class="apt-floor">${flLabel[lang](a.floor)}</div>
         </div>
+        <div class="apt-area">${a.area}<span class="apt-area-unit"> m²</span></div>
         <div class="apt-meta-row">
-          <div class="apt-meta-item">
-            <div class="apt-meta-val">${a.area}</div>
-            <div class="apt-meta-key"><span data-lang="en active">Total m²</span><span data-lang="ru">Общая м²</span><span data-lang="ge">სულ მ²</span></div>
-          </div>
+          <div class="apt-meta-item"><span class="apt-meta-val">${a.br}</span> <span data-lang="en active">bed</span><span data-lang="ru">комн.</span><span data-lang="ge">საძ.</span></div>
           <div class="apt-meta-divider"></div>
-          <div class="apt-meta-item">
-            <div class="apt-meta-val">${a.br}</div>
-            <div class="apt-meta-key"><span data-lang="en active">Bedrooms</span><span data-lang="ru">Спальни</span><span data-lang="ge">საძინებელი</span></div>
-          </div>
+          <div class="apt-meta-item"><span class="apt-meta-val">${a.area}</span> m²</div>
           <div class="apt-meta-divider"></div>
-          <div class="apt-meta-item">
-            <div class="apt-meta-val">${floorStr}</div>
-            <div class="apt-meta-key"><span data-lang="en active">Floor</span><span data-lang="ru">Этаж</span><span data-lang="ge">სართული</span></div>
-          </div>
-          <div class="apt-meta-divider"></div>
-          <div class="apt-meta-item">
-            <div class="apt-meta-val">${photos.length}</div>
-            <div class="apt-meta-key"><span data-lang="en active">Photos</span><span data-lang="ru">Фото</span><span data-lang="ge">ფოტო</span></div>
-          </div>
+          <div class="apt-meta-item"><span data-lang="en active">Floor <span class="apt-meta-val">${floorStr}</span></span><span data-lang="ru">Эт. <span class="apt-meta-val">${floorStr}</span></span><span data-lang="ge">სართ. <span class="apt-meta-val">${floorStr}</span></span></div>
         </div>
         ${priceBlock}
         ${inquireBtn}
@@ -1675,6 +1649,26 @@ function submitForm(){
     renderApts();
     renderSchema();
   });
+
+  // Sync with admin panel in real time
+  // 1. Storage event — fires when another tab changes localStorage
+  window.addEventListener('storage', function(e) {
+    if (e.key && (e.key === 'gr_admin_data' || e.key.startsWith('gr_photos_'))) {
+      renderApts();
+      renderSchema();
+    }
+  });
+
+  // 2. Polling every 5 seconds — works on same tab / mobile
+  let _lastAdminHash = '';
+  setInterval(function() {
+    const current = localStorage.getItem('gr_admin_data') || '';
+    if (current !== _lastAdminHash) {
+      _lastAdminHash = current;
+      renderApts();
+      renderSchema();
+    }
+  }, 5000);
 </script>
 </body>
 </html>
