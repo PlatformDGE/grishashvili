@@ -600,7 +600,7 @@ section { padding:110px 80px; }
 /* ── APT CARD GALLERY ── */
 .apt-gallery {
   position: relative;
-  height: 195px;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #f0ede8;
 }
@@ -726,36 +726,48 @@ section { padding:110px 80px; }
 
 /* ── APT CARD BODY — rich info ── */
 .apt-body { padding:14px 16px 16px; }
-.apt-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
-.apt-area-unit { font-size:12px; font-family:'Inter',sans-serif; font-weight:400; color:var(--text-muted); }
-
-
-.apt-meta-row {
+.apt-head {
   display: flex;
-  gap: 12px;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
-.apt-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.apt-num-badge {
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+.apt-main-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.apt-area-big {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1;
+}
+.apt-area-unit {
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
   font-weight: 400;
   color: var(--text-muted);
 }
-.apt-meta-val {
+.apt-floor-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
   font-weight: 500;
-  color: var(--charcoal);
+  color: var(--text-muted);
+  text-align: right;
 }
-.apt-meta-key { display: none; }
-.apt-meta-divider {
-  width: 3px; height: 3px;
-  border-radius: 50%;
-  background: var(--border);
-  flex-shrink: 0;
-}
+
+
+
 
 /* Status dot */
 .apt-status-dot { width:7px; height:7px; border-radius:50%; display:inline-block; margin-right:6px; }
@@ -814,10 +826,10 @@ section { padding:110px 80px; }
 }
 .apt-card:hover .apt-zoom-hint { opacity:1; }
 
-.apt-num { position:absolute; top:10px; left:10px; font-size:9px; font-weight:600; letter-spacing:0.1em; color:white; text-transform:uppercase; z-index:2; font-family:'Inter',sans-serif; background:rgba(13,26,51,0.55); padding:3px 8px; border-radius:2px; backdrop-filter:blur(4px); }
+
 .apt-body { padding:18px; }
 .apt-type { font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-family:'Inter',sans-serif; }
-.apt-area { font-family:'Playfair Display',serif; font-size:22px; font-weight:400; color:var(--navy); line-height:1; margin-bottom:8px; }
+
 .apt-area span { font-size:14px; color:var(--text-muted); }
 .apt-floor { font-size:11px; font-weight:400; color:var(--text-muted); margin-bottom:14px; font-family:'Inter',sans-serif; }
 .apt-price-block {
@@ -938,10 +950,47 @@ button[data-lang].active { display:inline; }
   .partner-section { grid-template-columns:1fr; padding:60px 28px; gap:40px; }
   .partner-logo-wrap { flex-direction:row; justify-content:center; }
   .apts-grid { grid-template-columns:1fr; gap:1px; }
-  .apt-gallery { height:240px; }
+
   .apt-body { padding:14px 16px 16px; }
-.apt-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
-.apt-area-unit { font-size:12px; font-family:'Inter',sans-serif; font-weight:400; color:var(--text-muted); }
+.apt-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.apt-num-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+.apt-main-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.apt-area-big {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1;
+}
+.apt-area-unit {
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.apt-floor-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-align: right;
+}
   .apt-meta-row { gap:8px; }
   .apt-meta-val { font-size:15px; }
   .apt-meta-key { font-size:8px; }
@@ -968,7 +1017,7 @@ button[data-lang].active { display:inline; }
 
 @media (max-width:480px) {
   .apts-grid { grid-template-columns:1fr; gap:1px; }
-  .apt-gallery { height:210px; }
+
   .apt-price-value { font-size:17px; }
 }
 @media (max-width:560px) {
@@ -1348,7 +1397,6 @@ function renderApts(){
       ${tabs}
       ${isSold?'<div class="apt-sold-overlay"><div class="apt-sold-label">SOLD</div></div>':''}
       ${isReserved?'<div class="apt-reserved-badge">Reserved</div>':''}
-      <span class="apt-num">N°${a.num}</span>
     </div>`;
 
     // Floor label
@@ -1370,15 +1418,11 @@ function renderApts(){
       <div class="apt-body">
         <div class="apt-head">
           <div class="apt-type">${brLabel[lang][a.br]}</div>
-          <div class="apt-floor">${flLabel[lang](a.floor)}</div>
+          <div class="apt-num-badge">N°${a.num}</div>
         </div>
-        <div class="apt-area">${a.area}<span class="apt-area-unit"> m²</span></div>
-        <div class="apt-meta-row">
-          <div class="apt-meta-item"><span class="apt-meta-val">${a.br}</span> <span data-lang="en active">bed</span><span data-lang="ru">комн.</span><span data-lang="ge">საძ.</span></div>
-          <div class="apt-meta-divider"></div>
-          <div class="apt-meta-item"><span class="apt-meta-val">${a.area}</span> m²</div>
-          <div class="apt-meta-divider"></div>
-          <div class="apt-meta-item"><span data-lang="en active">Floor <span class="apt-meta-val">${floorStr}</span></span><span data-lang="ru">Эт. <span class="apt-meta-val">${floorStr}</span></span><span data-lang="ge">სართ. <span class="apt-meta-val">${floorStr}</span></span></div>
+        <div class="apt-main-info">
+          <div class="apt-area-big">${a.area}<span class="apt-area-unit"> m²</span></div>
+          <div class="apt-floor-tag">${flLabel[lang](a.floor)}</div>
         </div>
         ${priceBlock}
         ${inquireBtn}
@@ -1443,6 +1487,20 @@ function submitForm(){
   };
   const text=encodeURIComponent(greetings[lang]||greetings.en);
   window.open(`https://wa.me/995599206716?text=${text}`,'_blank');
+
+  // Save lead to Google Sheets
+  fetch(GS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      type: 'lead',
+      name,
+      phone,
+      apartment: apt || '—',
+      message: msg || '—',
+      lang
+    })
+  }).catch(e => console.warn('Lead save error', e));
 }
 
   // ── Google Sheets API ──
